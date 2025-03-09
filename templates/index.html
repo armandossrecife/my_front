@@ -1,0 +1,62 @@
+{% from "macros.html" import cabecalho %}
+{% extends "base.html" %}
+
+{% block title %} Página principal {% endblock %}
+    
+{% block content %}        
+    {{ cabecalho() }}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                {% if current_user.is_authenticated %}
+                    Olá {{ current_user.name }}, você pode acessar o 
+                    <a href="{{ url_for('dashboard.dashboard')}}">Dashboard</a>
+                {% else %}
+                <a href="{{ url_for('auth.register') }}" style="float: right;">[Registro]</a>
+                <a href="{{ url_for('auth.login') }}" style="float: right;">[Login] </a>                
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-sm-4">
+                <h3>Features Básicas</h3>
+                <p>Um protótipo web ...</p>
+                <p><strong>Objetivo:</strong> criar uma aplicação...</p>
+                <p>Logo abaixo seguem as features mais importantes:</p>
+                <ul>
+                    <li>F1. Login</li>
+                    <li>F2. Logout</li>
+                    <li>F3. Registro de novo usuário</li>
+                    <li>F4. Recuperar senha</li>
+                    <li>F5. Gerenciar Dashboard</li>
+                    <li>F6. Gerenciar Profile do usuário</li>
+                </ul>
+            </div>
+            <div class="col-sm-4">
+                <h3>Aspectos Técnicos</h3>
+                <p>Logo abaixo seguem as principais influências técnicas do projeto: </p>
+                <ul>
+                    <li>Uso do Flask para criar aplicações HTML dinâmicas com estilos CSS</li>
+                    <li>Uso da biblioteca requests para consumir APIs</li>
+                    <li>Uso do Bootstrap 5 para criar e gerenciar componentes de UI</li>
+                    <li>Mais detalhes sobre a stack escolhida em link</li>
+                </ul>
+            </div>
+            <div class="col-sm-4">
+                <h3>Architetura em Camadas</h3>        
+                <p>A arquitetura da aplicação segue uma abordagem de camadas, separando as responsabilidades e promovendo a modularidade. Ela consiste nos seguintes componentes principais:</p>
+                <p><strong>Camada de Apresentação (Presentation Layer):</strong>
+                    <p>Responsável por lidar com a interface do usuário e a interação com o cliente.</p>                    
+                    <p>Composta pelos templates HTML localizados na pasta templates, que definem a estrutura e o layout das páginas. Os arquivos de template são renderizados pelo Flask para exibir as informações dinâmicas do sistema.</p>
+                <p><strong>Camada de Controle (Controller Layer):</strong></p>
+                    <p>
+                        Gerencia as requisições HTTP, processa a lógica de negócios e direciona as ações apropriadas. Implementada nos módulos auth.py, dashboard.py, tarefas.py e imagens.py localizados na pasta app/routes. Os controladores (routes) recebem as requisições do cliente, extraem os parâmetros necessários e invocam os serviços correspondentes da API da aplicação back-end.
+                    </p>
+            </div>
+        </div>
+    </div>        
+{% endblock %}

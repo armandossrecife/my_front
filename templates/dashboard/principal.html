@@ -1,0 +1,20 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block conteudodashboard %}
+
+        {% for category, message in get_flashed_messages(with_categories=True) %}
+        {% if message %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+        {% endfor %}
+
+        {{ id }}
+        {{ nome_usuario }}
+
+        <h3>Área Principal do Dashboard</h3>
+        <p>Conteúdo do Dashboard</p>
+        
+{% endblock %}

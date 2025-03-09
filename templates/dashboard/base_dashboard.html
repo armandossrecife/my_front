@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %} {{ informacao.titulo }} {% endblock %}
+    
+{% block content %}        
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Panel 1: Mini-Sidebar -->
+        <nav class="mini-sidebar bg-dark text-white">
+            <!-- Toggle Button (Icon) -->
+            <button id="toggleSidebar" class="btn btn-link text-white" type="button" aria-label="Toggle Sidebar">
+                <i class="bi bi-list" style="font-size: 1.5rem;"></i> <!-- Hamburger Icon -->
+            </button>
+            <!-- Home Button (Icon) -->
+            <button id="homeButton" class="btn btn-link text-white mt-3" type="button" data-home-url="{{ url_for('dashboard.dashboard') }}">
+                <i class="bi bi-house" style="font-size: 1.5rem;"></i> <!-- Home Icon -->
+            </button>
+            <!-- Button 2 (Icon) -->
+            <button id="button2" class="btn btn-link text-white mt-3" type="button">
+                <i class="bi bi-gear" style="font-size: 1.5rem;"></i> <!-- Settings Icon -->
+            </button>
+            <!-- Logout Button (Icon) -->
+            <button id="logoutButton" class="btn btn-link text-white mt-3" type="button" data-logout-url="{{ url_for('auth.logout') }}">
+                <i class="bi bi-box-arrow-right" style="font-size: 1.5rem;"></i> <!-- Logout Icon -->
+            </button>
+        </nav>
+
+        <!-- Panel 2: Main Sidebar (Initially Hidden) -->
+        <nav id="mainSidebar" class="col-md-3 col-lg-2 bg-dark text-white vh-100 collapse">
+            <div class="sidebar-sticky pt-3">
+                <!-- Links for Toggle Button -->
+                <div id="linksButton1">
+                    <h3 class="text-center">Links</h3>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link text-white" href="#">Link 1.1</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="#">Link 1.2</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </nav>
+
+        <!-- Panel 3: Main Content -->
+        <div id="mainContent" class="col-md-9 col-lg-10 main-content">
+            <!-- Breadcrumb -->
+            <div class="container-fluid mt-4">
+                <div class="row">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ url_for('dashboard.dashboard') }}">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ informacao.breadcrumb }}</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Barra de mensagens -->
+            {% if informacao.mensagem %}
+            <div class="container-fluid mt-4">
+                <div class="alert alert-primary alert-dismissible" role="alert">
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    {{ informacao.mensagem }}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="p-4">
+                {% block conteudodashboard %}
+                {% endblock %}               
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

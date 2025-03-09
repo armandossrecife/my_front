@@ -1,0 +1,10 @@
+Flask
+requests
+selenium
+HTMLTestRunner-rv
+pandas
+matplotlib
+plotly
+xmltodict
+dotenv
+config
