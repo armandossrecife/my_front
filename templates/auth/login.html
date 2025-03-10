@@ -19,11 +19,11 @@
         <form action="{{ url_for('auth.login') }}" method="POST">
             {{ form.hidden_tag() }}
             <div class="mb-3 mt-3">
-                <label for="email" class="form-label">Email:</label>
+                <label class="form-label">Email:</label>
                 {{ form.username(placeholder="User Name") }}
             </div>
             <div class="mb-3">
-                <label for="pwd" class="form-label">Password:</label>
+                <label class="form-label">Password:</label>
                 {{ form.password(placeholder="Password") }}
             </div>
             <div class="form-check mb-3">

@@ -11,6 +11,7 @@ class LoginForm(FlaskForm):
 class RegisterForm(FlaskForm):
     name = StringField('Full name', [validators.DataRequired()], render_kw={"class": "form-control"})
     username = EmailField('Email', [validators.DataRequired(), validators.Email()], render_kw={"class": "form-control"})
+    confirm_username = EmailField('Email', [validators.DataRequired(), validators.Email()], render_kw={"class": "form-control"})
     password = PasswordField('Password', [validators.DataRequired(), Length(min=6, message='A senha deve ter pelo menos 6 caracteres.')],render_kw={"class": "form-control"})
     password2 = PasswordField('Password2', [validators.DataRequired(), EqualTo('password', message='As senhas devem ser iguais.')], render_kw={"class": "form-control"})
     submit = SubmitField('Register', render_kw={"class": "btn btn-primary"})

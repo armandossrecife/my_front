@@ -29,6 +29,14 @@ function setupMiniSideBarButtons() {
     // Set up the home button
     const homeButton = document.getElementById('homeButton');
     handleButtonClick(homeButton, 'data-home-url');
+
+    // Set up the profile button
+    const profileButton = document.getElementById('profileButton');
+    handleButtonClick(profileButton, 'data-profile-url');
+
+    // Set up the setting button
+    const settingButton = document.getElementById('settingButton');
+    handleButtonClick(settingButton, 'data-setting-url')
 }
 
 // Call the function to set up the buttons when the DOM is fully loaded

@@ -4,7 +4,7 @@
     
 {% block content %}        
     {{ cabecalho() }}
-    <script src="{{ url_for('static', filename='assets/my/js/scripts.js') }}"></script>
+    <script src="static/assets/my/validate.js"></script>
     <div class="container-fluid">
         <h2>Novo Usuário</h2>
 
@@ -18,23 +18,23 @@
         <form action="{{ url_for('auth.register') }}" onsubmit="return validateEmail() && validatePassword()" method="POST">
             {{ form.hidden_tag() }}
             <div class="mb-3 mt-3">
-                <label for="nome" class="form-label">Nome:</label>
+                <label class="form-label">Nome:</label>
                 {{ form.name(placeholder="Nome") }}
             </div>
             <div class="mb-3 mt-3">
-                <label for="email" class="form-label">Email:</label>
+                <label class="form-label">Email:</label>
                 {{ form.username(placeholder="email") }}
             </div>
             <div class="mb-3 mt-3">
-                <label for="email" class="form-label">Confirma Email:</label>
-                {{ form.username(placeholder="email") }}
+                <label class="form-label">Confirma Email:</label>
+                {{ form.confirm_username(placeholder="email") }}
             </div>
             <div class="mb-3">
-                <label for="pwd" class="form-label">Password:</label>
+                <label class="form-label">Password:</label>
                 {{ form.password(placeholder="Passwod") }}
             </div>
             <div class="mb-3">
-                <label for="confirmapwd" class="form-label">Confirma Password:</label>
+                <label class="form-label">Confirma Password:</label>
                 {{ form.password2(placeholder="Confirm Passwod") }}
             </div>
             {{ form.submit() }}

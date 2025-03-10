@@ -19,9 +19,27 @@ class UserDAO:
     def user_by_email(self, email):
         return User.query.filter_by(email=email).first()
 
-    def update_user(self, user):
-        self.db.session.merge(user)
-        self.db.session.commit()
+    def update_user(self, user_id, name, username, email, password):
+        user = user = User.query.get(user_id)
+        if user:
+            if name is not None:
+                user.name = name
+            if username is not None:
+                user.username = username
+            if email is not None:
+                user.email = email
+            if password is not None:
+                user.password = password # In production hash the password.            
+        
+            try: 
+                self.db.session.commit()
+                return user
+            except Exception as e:
+                self.db.session.rollback() # Important to rollback in case of error.
+                print(f"Error updating user: {e}") # Log the error.
+                return None
+        else:
+            return None
 
     def delete_user_by_id(self, user_id):
         user = self.user_by_id(user_id)
