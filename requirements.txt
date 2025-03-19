@@ -8,3 +8,7 @@ plotly
 xmltodict
 dotenv
 config
+flask_login
+Flask-SQLAlchemy
+Flask-WTF
+email_validator
