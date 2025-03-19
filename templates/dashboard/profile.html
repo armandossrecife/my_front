@@ -1,7 +1,6 @@
 {% extends "dashboard/base_dashboard.html" %}
 
 {% block conteudodashboard %}
-
     <!-- Flash Messages -->
     {% for category, message in get_flashed_messages(with_categories=True) %}
         {% if message %}
@@ -26,10 +25,14 @@
                                 <!-- User Information -->
                                 <div class="mb-4">
                                     <h3>Informações Pessoais</h3>
-                                    <form method="POST" action="{{ url_for('dashboard.update_profile') }}">
-                                        <!-- Picture Profie-->
-                                        <div class="class="mb-3" text-center">
-                                            <img src="{{ informacao.imagem }}" alt="Imagem do usuaario" width="128" height="128" class="rounded-circle">
+                                    <form method="POST" action="{{ url_for('dashboard.update_profile') }}" enctype="multipart/form-data">
+                                        <!-- Profile Picture -->
+                                        <div class="mb-3 text-center">
+                                            <img src="{{ current_user.profile_picture_url or 'static/assets/icons/person-circle.svg' }}" alt="Imagem do usuário" width="128" height="128" class="rounded-circle">
+                                            <div class="mt-2">
+                                                <label for="profile_picture" class="form-label">Alterar Foto de Perfil</label>
+                                                <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*">
+                                            </div>
                                         </div>
 
                                         <!-- Name Field -->
@@ -67,5 +70,4 @@
             </div>
         </div>
     </div>
-
 {% endblock %}

@@ -9,6 +9,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(250), unique=True, nullable=False)
     password = db.Column(db.String(500), nullable=False)
     my_files = db.relationship('File', secondary=user_files, backref='myfiles')
+    profile_picture_url = db.Column(db.String(250))
 
 # Classe que representa os dados de um arquivo
 class File(db.Model):

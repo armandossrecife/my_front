@@ -19,8 +19,8 @@ class UserDAO:
     def user_by_email(self, email):
         return User.query.filter_by(email=email).first()
 
-    def update_user(self, user_id, name, username, email, password):
-        user = user = User.query.get(user_id)
+    def update_user(self, user_id, name, username, email, password, profile_picture_url=None):
+        user = User.query.get(user_id)
         if user:
             if name is not None:
                 user.name = name
@@ -29,14 +29,16 @@ class UserDAO:
             if email is not None:
                 user.email = email
             if password is not None:
-                user.password = password # In production hash the password.            
-        
-            try: 
+                user.password = password  # In production, hash the password.
+            if profile_picture_url is not None:
+                user.profile_picture_url = profile_picture_url  # Update profile picture URL
+
+            try:
                 self.db.session.commit()
                 return user
             except Exception as e:
-                self.db.session.rollback() # Important to rollback in case of error.
-                print(f"Error updating user: {e}") # Log the error.
+                self.db.session.rollback()  # Important to rollback in case of error.
+                print(f"Error updating user: {e}")  # Log the error.
                 return None
         else:
             return None

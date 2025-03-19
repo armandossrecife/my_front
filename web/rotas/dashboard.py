@@ -1,12 +1,14 @@
 import logging
 from flask import Blueprint, render_template, session, flash, request
-from flask import redirect, url_for
+from flask import redirect, url_for, current_app
 from web import utilidades as utilidades_web
 from flask_login import login_required, current_user
 from logging.handlers import RotatingFileHandler
 from werkzeug.security import generate_password_hash
 import banco
 from dao import UserDAO
+import os
+from werkzeug.utils import secure_filename
 
 dashboard_bp = Blueprint('dashboard', __name__)
 
@@ -63,20 +65,40 @@ def update_profile():
             name = request.form.get('name')
             password = request.form.get('password')
             confirm_password = request.form.get('confirm_password')
+            profile_picture = request.files.get('profile_picture')  # Get the uploaded file
 
             # Validate password (if provided)
             if password and password != confirm_password:
                 flash('As senhas não coincidem.', category='error')
                 return redirect(url_for('dashboard.profile'))
+            
+             # Handle profile picture upload
+            if profile_picture:
+                # Ensure the uploads directory exists
+                upload_folder = os.path.join(current_app.root_path, 'static', 'uploads')                
+                os.makedirs(upload_folder, exist_ok=True)
+                upload_folder_user_id = os.path.join(upload_folder, str(current_user.id))
+                os.makedirs(upload_folder_user_id, exist_ok=True)
+
+                # Secure the filename and save the file
+                filename = secure_filename(profile_picture.filename)
+                filepath = os.path.join(upload_folder_user_id, filename)
+                profile_picture.save(filepath)
+
+                # Save the relative path to the database
+                profile_picture_url = f"static/uploads/{current_user.id}/{filename}"
+            else:
+                # Keep the existing profile picture if no new file is uploaded
+                profile_picture_url = current_user.profile_picture_url
 
             # Update user information
             current_user.name = name
 
             # Update password (if provided)
             if password:
-                updated_user = userDAO.update_user(user_id = current_user.id, name=name, username=current_user.email, email=current_user.email, password=generate_password_hash(password))
+                updated_user = userDAO.update_user(user_id = current_user.id, name=name, username=current_user.email, email=current_user.email, password=generate_password_hash(password), profile_picture_url=profile_picture_url)
             else:
-                updated_user = userDAO.update_user(user_id = current_user.id, name=name, username=current_user.email, email=current_user.email, password=current_user.password)
+                updated_user = userDAO.update_user(user_id = current_user.id, name=name, username=current_user.email, email=current_user.email, password=current_user.password, profile_picture_url=profile_picture_url)
             flash(f'Perfil do {updated_user.username} atualizado com sucesso!', category='success')
             return redirect(url_for('dashboard.profile'))
     except IOError as ioe:
