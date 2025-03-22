@@ -3,7 +3,37 @@
     
 {% block content %}        
 
-<div class="container-fluid">
+<!-- Main header -->
+<nav class="main-header navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Meu App</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-bs-toggle="tooltip" title="Notifications">
+                        <i class="bi bi-bell"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-bs-toggle="tooltip" title="Explore">
+                        <i class="bi bi-compass"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-bs-toggle="tooltip" title="Directions">
+                        <i class="bi bi-signpost"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Side bar -->
+<aside class="container-fluid">
     <div class="row">
         <!-- Panel 1: Mini-Sidebar -->
         <nav class="mini-sidebar bg-dark text-white">
@@ -12,19 +42,19 @@
                 <i class="bi bi-list" style="font-size: 1.5rem;"></i> <!-- Hamburger Icon -->
             </button>
             <!-- Home Button (Icon) -->
-            <button id="homeButton" class="btn btn-link text-white mt-3" type="button" data-home-url="{{ url_for('dashboard.dashboard') }}">
+            <button id="homeButton" class="btn btn-link text-white mt-3" type="button" data-home-url="{{ url_for('dashboard.dashboard') }}" data-bs-toggle="tooltip" title="Home">
                 <i class="bi bi-house" style="font-size: 1.5rem;"></i> <!-- Home Icon -->
             </button>
             <!-- Profile Button (Icon) -->
-            <button id="profileButton" class="btn btn-link text-white mt-3" type="button" data-profile-url="{{ url_for('dashboard.profile') }}">
+            <button id="profileButton" class="btn btn-link text-white mt-3" type="button" data-profile-url="{{ url_for('dashboard.profile') }}" data-bs-toggle="tooltip" title="Profile">
                 <i class="bi bi-person" style="font-size: 1.5rem;"></i> <!-- Profile Icon -->
             </button>
             <!-- Setting Button (Icon) -->
-            <button id="settingButton" class="btn btn-link text-white mt-3" type="button" data-setting-url="{{ url_for('dashboard.configuracoes') }}">
+            <button id="settingButton" class="btn btn-link text-white mt-3" type="button" data-setting-url="{{ url_for('dashboard.configuracoes') }}" data-bs-toggle="tooltip" title="Configurações">
                 <i class="bi bi-gear" style="font-size: 1.5rem;"></i> <!-- Settings Icon -->
             </button>
             <!-- Logout Button (Icon) -->
-            <button id="logoutButton" class="btn btn-link text-white mt-3" type="button" data-logout-url="{{ url_for('auth.logout') }}">
+            <button id="logoutButton" class="btn btn-link text-white mt-3" type="button" data-logout-url="{{ url_for('auth.logout') }}" data-bs-toggle="tooltip" title="Logout">
                 <i class="bi bi-box-arrow-right" style="font-size: 1.5rem;"></i> <!-- Logout Icon -->
             </button>
         </nav>
@@ -34,7 +64,7 @@
             <div class="sidebar-sticky pt-3">
                 <!-- Links for Toggle Button -->
                 <div id="linksButton1">
-                    <h3 class="text-center">Links</h3>
+                    <h5 class="text-center">Links</h5>
                     <ul class="nav flex-column">
                         <li class="nav-item"><a class="nav-link text-white" href="#">Link 1.1</a></li>
                         <li class="nav-item"><a class="nav-link text-white" href="#">Link 1.2</a></li>
@@ -48,7 +78,7 @@
         <!-- Panel 3: Main Content -->
         <div id="mainContent" class="col-md-9 col-lg-10 main-content">
             <!-- Breadcrumb -->
-            <div class="container-fluid mt-4">
+            <div>
                 <div class="row">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
@@ -61,7 +91,7 @@
 
             <!-- Barra de mensagens -->
             {% if informacao.mensagem %}
-            <div class="container-fluid mt-4">
+            <div>
                 <div class="alert alert-primary alert-dismissible" role="alert">
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     {{ informacao.mensagem }}
@@ -69,7 +99,7 @@
             </div>
             {% endif %}
 
-            <div class="p-4">
+            <div>
                 {% block conteudodashboard %}
                 {% endblock %}               
             </div>
@@ -77,7 +107,7 @@
 
     </div>
 
-</div>
+</aside>
 
 <!-- Custom JS -->
 <script src="{{ url_for('static', filename='scripts.js') }}"></script>

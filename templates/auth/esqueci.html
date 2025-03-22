@@ -6,7 +6,7 @@
     {{ cabecalho() }}
     <div class="container-fluid">
         <h2>Recuperar Senha</h2>
-        <form action="{{ url_for('auth.esqueci') }}" method="POST">
+        <form action="{{ url_for('esqueci') }}" method="POST">
             <div class="mb-3 mt-3">
                 <label for="email" class="form-label">Email:</label>
                 <input type="email" class="form-control" id="email" placeholder="Informe o email" name="email">

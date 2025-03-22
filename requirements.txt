@@ -12,3 +12,4 @@ flask_login
 Flask-SQLAlchemy
 Flask-WTF
 email_validator
+Flask-Mail

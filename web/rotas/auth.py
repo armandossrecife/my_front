@@ -58,13 +58,6 @@ def register():
         return redirect(url_for("auth.login"))
     return render_template("auth/registro.html", form=register_form)
 
-@auth_bp.route('/esqueci', methods=['GET', 'POST'])
-def esqueci():
-    if request.method == 'POST':
-        flash("Funcionalidade de recuperação de senha não implementada.", category='warning')
-        return redirect(url_for("auth.login"))
-    return render_template('auth/esqueci.html')
-
 @auth_bp.route('/logout') 
 @login_required
 def logout():

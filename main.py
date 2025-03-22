@@ -1,7 +1,7 @@
 import os
 import logging
 from config import Config
-from flask import Flask, render_template, send_from_directory, redirect, url_for
+from flask import Flask, render_template, send_from_directory, redirect, url_for, flash, request
 from flask_login import LoginManager
 from logging.handlers import RotatingFileHandler
 from web.rotas import dashboard
@@ -9,6 +9,9 @@ from web.rotas import auth
 import banco
 from dao import UserDAO, FilesDAO
 from web import utilidades as utilidades_web
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer
+from werkzeug.security import generate_password_hash
 
 # Cria a aplicação (web) principal
 web_app = Flask(__name__, static_folder='static')
@@ -27,6 +30,9 @@ file_handler = RotatingFileHandler(filename='logs/web_app.log', maxBytes=10000, 
 file_handler.setFormatter(formatter)
 web_app.logger.addHandler(file_handler)
 
+# Carrega uma intancia para manipular envio de e-mail
+mail = Mail(web_app)
+
 # Inicializa a instância do banco de dados
 banco.db.init_app(web_app)
 banco.create_tables(web_app, Config.DROP_DATA_BASE)
@@ -40,6 +46,18 @@ login_manager.login_view = "login"
 # Carrega os DAOs de usuários e arquivos
 userDAO = UserDAO(banco.db)
 filesDAO = FilesDAO(banco.db)
+
+def generate_reset_token(user_id):
+    serializer = URLSafeTimedSerializer(web_app.config['SECRET_KEY'])
+    return serializer.dumps(user_id, salt='password-reset-salt')
+
+def verify_reset_token(token, expiration=3600):
+    serializer = URLSafeTimedSerializer(web_app.config['SECRET_KEY'])
+    try:
+        user_id = serializer.loads(token, salt='password-reset-salt', max_age=expiration)
+    except:
+        return None
+    return userDAO.user_by_id(user_id=user_id)
 
 @login_manager.user_loader 
 def load_user(user_id):
@@ -110,6 +128,65 @@ def internal_server_error_service_unavailable(error):
 def internal_server_error_gateway_timeout(error):
     web_app.logger.error(f"Internal Server Gateway Timeout: {str(error)}")
     return render_template('erros/504.html', erro=error), 504
+
+@web_app.route('/forgot-password', methods=['GET', 'POST'])
+def esqueci():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        try:
+            # Check if the email exists in your database (pseudo-code)
+            user = userDAO.user_by_email(email=email)
+            if user:
+                # Generate a password reset token (pseudo-code)
+                token = generate_reset_token(user.id)
+                                
+                # Send the password reset email
+                reset_url = url_for('reset_password', token=token, _external=True)
+                print(reset_url)
+                msg = Message('Password Reset Request', sender='no-reply@example.com', recipients=[email])
+                msg.body = f'''To reset your password, visit the following link:
+                                {reset_url}
+
+                                If you did not make this request, simply ignore this email.
+                                '''
+                mail.send(msg)
+                
+                flash('Foi enviado um link para o seu e-mail para resetar sua senha.', category='info')
+                return redirect(url_for('auth.login'))
+            else:
+                flash('Email não cadastrado.', category='warning')                
+        except IOError as ioe:
+            flash(f"Erro de IO durante recuperação de senha do usuário: {str(ioe)}.", category='error')
+        except Exception as ex:
+            flash(f"Erro {str(ex)} na recuperação de senha do usuário", category='error')
+        return redirect(url_for("auth.login"))
+        
+    return render_template('auth/esqueci.html')
+
+# TODO: implementar o tratamento das possiveis excecoes
+@web_app.route('/reset-password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    user = verify_reset_token(token)
+    if not user:
+        flash('Invalid or expired token.', category='error')
+        return redirect(url_for('auth.esqueci'))
+    
+    if request.method == 'POST':
+        new_password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+        
+        if new_password == confirm_password:
+            # Update the user's password
+            updated_user = userDAO.update_password(user_id=user.id, new_password=generate_password_hash(new_password))
+            if updated_user: 
+                flash('Sua senha foi resetada com sucesso!.', category='success')
+            else:
+                flash('Não retornou um usuário válido', category='error')
+            return redirect(url_for('auth.login'))
+        else:
+            flash('Passwords do not match.', category='error')
+    
+    return render_template('auth/reset_password.html', token=token)
 
 if __name__ == '__main__':
     web_app.run(debug=Config.DEBUG, port=5001)

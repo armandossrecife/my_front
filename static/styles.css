@@ -1,7 +1,11 @@
+.main-header {
+    border-bottom: 1px solid #dee2e6;
+    z-index: 1034;
+}
 /* Mini-Sidebar */
 .mini-sidebar {
     position: fixed;
-    top: 0;
+    top: 40;
     left: 0;
     width: 60px;
     height: 100vh;
@@ -28,7 +32,7 @@
 /* Main Sidebar */
 #mainSidebar {
     position: fixed;
-    top: 0;
+    top: 40;
     left: 60px;
     width: 250px;
     height: 100vh;

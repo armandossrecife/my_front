@@ -25,9 +25,12 @@ class Config:
     LOG_FILE = os.getenv('LOG_FILE', 'logs/web.log')  # Arquivo de log
 
     # Configurações de e-mail (exemplo)
-    MAIL_SERVER = os.getenv('MAIL_SERVER', 'smtp.example.com')
-    MAIL_PORT = int(os.getenv('MAIL_PORT', 587))
+    # Ambiente de testes referenciando https://mailtrap.io
+    # TODO: Ajustar para um servidor smtp de producao
+    MAIL_SERVER = os.getenv('MAIL_SERVER', 'sandbox.smtp.mailtrap.io')
+    MAIL_PORT = int(os.getenv('MAIL_PORT', 2525))
     MAIL_USE_TLS = os.getenv('MAIL_USE_TLS', 'True').lower() in ('true', '1', 't')
+    MAIL_USE_SSL = False # TODO: Ajustar para a configuracao do servidor smtp de producao
     MAIL_USERNAME = os.getenv('MAIL_USERNAME')
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
 

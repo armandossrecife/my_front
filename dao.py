@@ -42,6 +42,30 @@ class UserDAO:
                 return None
         else:
             return None
+        
+    def update_password(self, user_id, new_password):
+        """
+        Update the password for a user with the given user_id.    
+        Args:
+            user_id (int): The ID of the user whose password will be updated.
+            new_password (str): The new password to set for the user.        
+        Returns:
+            User: The updated user object if successful, None otherwise.
+        """
+        user = self.user_by_id(user_id)
+        if user:
+            # Hash the new password before saving it to the database
+            # hashed_password = generate_password_hash(new_password, method='sha256')
+            user.password = new_password # hashed_password
+            try:
+                self.db.session.commit()
+                return user
+            except Exception as e:
+                self.db.session.rollback()  # Rollback in case of error
+                print(f"Error updating password: {e}")  # Log the error
+                return None
+        else:
+            return None
 
     def delete_user_by_id(self, user_id):
         user = self.user_by_id(user_id)
